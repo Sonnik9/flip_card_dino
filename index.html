@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра Мемори: Дино-парк и Уно</title>
+    <link rel="stylesheet" href="./style.css">
+    <script defer src="./app.js"></script>    
+</head>
+<body>
+  <div class="memo-container">
+    <aside class="control-panel">
+      <div class="controls-group">
+        <button class="start-btn" id="btn-start">Новая Игра</button>
+        <select class="select-field" id="select-theme">
+          <option value="dino">Динозавры</option>
+          <option value="uno">Classic (Local)</option>
+        </select>
+        <select class="select-field" id="select-level">
+          <option value="easy">Лёгкий</option>
+          <option value="middle">Средний</option>
+          <option value="advance">Сложный</option>
+        </select>
+      </div>
+      <div class="timer-display"><span class="label">Время:</span> <span class="time-item" id="time-display">0</span></div>
+    </aside>
+
+    <section class="game-board" id="game-board"></section>
+
+    <footer class="game-footer">
+        <div class="score-display">Счёт: <p class="score-result" id="score-display"></p></div>
+        <div class="win-message" id="win-message">Ты победил!</div>
+    </footer>
+  </div>
+</body>
+</html>
