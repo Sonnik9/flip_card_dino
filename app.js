@@ -1,14 +1,19 @@
 // --- КОНФИГУРАЦИЯ ТЕМ И УРОВНЕЙ ---
 const CONFIG = {
     themes: {
-        dino: { path: './assets/dino/', ext: '.jpg', prefix: 'dino' },
+        dino: { path: './assets/dino/', ext: '.png', prefix: 'dino' },
         uno:  { path: './assets/uno/',  ext: '.jpg', prefix: 'uno' },
         cars: { path: './assets/cars/', ext: '.jpg', prefix: 'cars' }
     },
+    // levels: {
+    //     easy:    { pairs: 6,  columns: 4 },
+    //     middle:  { pairs: 12, columns: 6 },
+    //     advance: { pairs: 18, columns: 9 }
+    // }
     levels: {
         easy:    { pairs: 6,  columns: 4 },
         middle:  { pairs: 12, columns: 6 },
-        advance: { pairs: 18, columns: 9 }
+        advance: { pairs: 21, columns: 7 } // 21 пара (42 карты), сетка 7х6
     }
 };
 
