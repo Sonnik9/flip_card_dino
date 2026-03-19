@@ -1,100 +1,67 @@
+* {
+    padding: 0; margin: 0; box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 body {
     background: #1a1a2e;
     color: white;
     user-select: none;
     -webkit-user-select: none;
-    /* Блокируем скролл всей страницы, прокручиваться будет только доска */
-    overflow: hidden; 
+    overflow: hidden; /* ЖЕСТКО БЕЗ СКРОЛЛА */
     height: 100vh;
+    height: 100dvh;
 }
 
 .memo-container {    
     margin: 0 auto;
     width: 100%;
-    max-width: 900px;
-    padding: 15px;
+    max-width: 800px; /* Ограничитель, как в твоем старом скрипте */
+    height: 100%; 
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    height: 100%; /* Контейнер строго на весь экран */
 }
 
-/* === ЖЕЛЕЗОБЕТОННЫЙ ХЕДЕР === */
+/* --- ЖЕЛЕЗОБЕТОННЫЙ ХЕДЕР --- */
 .control-panel {  
-    flex: 0 0 auto; /* Запрещаем сжиматься и растягиваться */
-    width: 100%;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;    
-    background: #16213e;
-    padding: 15px 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    flex: 0 0 auto; 
+    display: flex; justify-content: space-between; align-items: center;    
+    background: #16213e; padding: 10px 15px; border-radius: 12px; margin-bottom: 10px;
 }
 
-.controls-group {
-    display: flex;
-    gap: 15px;
-    align-items: center;
+.controls-group { 
+    display: flex; gap: 10px; align-items: center; 
+    flex-wrap: wrap; justify-content: center; 
 }
 
 .start-btn, .select-field {
-    border: none;
-    border-radius: 8px;
-    background: #e94560;
-    color: white;
-    font-size: 14px;
-    padding: 10px 18px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
+    border: none; border-radius: 8px; background: #e94560; color: white;
+    font-size: 14px; padding: 8px 12px; font-weight: 600; cursor: pointer;
 }
+.select-field { background: #0f3460; }
 
-.start-btn:hover { background: #b9374d; transform: translateY(-2px); }
-
-.select-field {
-    background: #0f3460;
-    cursor: pointer;
-}
-
-.select-field:focus { outline: none; box-shadow: 0 0 0 2px #e94560; }
-
-.timer-display {
-    font-size: 18px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.timer-display .label { color: #95a5a6; font-size: 16px; }
+.timer-display { font-size: 16px; font-weight: bold; }
+.timer-display .label { color: #95a5a6; }
 .time-item { color: #f1c40f; }
 
-/* === ГИБКАЯ ИГРОВАЯ ДОСКА СО СКРОЛЛОМ === */
+/* --- ИГРОВАЯ ДОСКА (АДАПТИВНАЯ, БЕЗ ВЫЛЕТОВ) --- */
 .game-board {
-    flex: 1 1 auto; /* Забирает всё свободное место между хедером и футером */
-    overflow-y: auto; /* Включаем внутренний скролл! */
+    flex: 1 1 auto; /* Забирает только оставшееся место */
     display: grid;
-    gap: 10px; 
-    align-content: start; /* Прижимаем карты к верху, чтобы скролл работал адекватно */
+    gap: 8px; 
     width: 100%;
-    padding: 5px; /* Чтобы не обрезалась тень от крайних карт */
+    min-height: 0; /* Обязательный хак, чтобы Flex не распирало */
+    /* МАГИЯ: делит свободную высоту поровну между всеми рядами! */
+    grid-auto-rows: minmax(0, 1fr); 
 }
 
-/* Стилизуем скроллбар в цвет темы, чтобы выглядело про-уровне */
-.game-board::-webkit-scrollbar { width: 8px; }
-.game-board::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 4px; }
-.game-board::-webkit-scrollbar-thumb { background: #e94560; border-radius: 4px; }
-
 .memory-card {
+    width: 100%; height: 100%; /* Занимает всю отведенную ячейку */
     position: relative;
-    width: 100%;
-    aspect-ratio: 1 / 1; 
     transform-style: preserve-3d;
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: transform 0.3s;
     cursor: pointer;
-    box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
-    border-radius: 8px;
 }
 
 .memory-card:active { transform: scale(0.96); }
@@ -102,27 +69,37 @@ body {
 
 .front-face, .back-face {
     width: 100%; height: 100%;
-    position: absolute;
-    border-radius: 8px;
-    backface-visibility: hidden;
-    object-fit: cover;
-    border: 2px solid rgba(255,255,255,0.1);
+    position: absolute; border-radius: 8px; backface-visibility: hidden; 
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
 }
 
-.front-face { transform: rotateY(180deg); background: #fdfdfd; }
-.back-face { background: #0f3460; }
+/* cover для рубашки, contain для динозавров (чтобы не обрезало лапы, если карточка вытянута) */
+.front-face { transform: rotateY(180deg); background: #fdfdfd; object-fit: contain; padding: 5px; }
+.back-face { background: #0f3460; object-fit: cover; }
 
-/* === ЖЕЛЕЗОБЕТОННЫЙ ФУТЕР === */
+/* --- ЖЕЛЕЗОБЕТОННЫЙ ФУТЕР --- */
 .game-footer {
-    flex: 0 0 auto; /* Запрещаем сжиматься и растягиваться */
-    width: 100%;
-    background: #16213e;
-    padding: 10px 15px;
-    border-radius: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    box-shadow: 0 -4px 10px rgba(0,0,0,0.3);
-    margin-top: 15px; 
+    flex: 0 0 auto; 
+    background: #16213e; padding: 10px 15px; border-radius: 12px; margin-top: 10px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+
+.score-display { font-size: 16px; color: #bdc3c7; display: flex; gap: 8px; }
+.score-result { color: #e74c3c; font-weight: bold; font-size: 18px; }
+.win-message { display: none; font-size: 16px; font-weight: bold; color: #2ecc71; text-transform: uppercase; }
+
+/* --- АДАПТИВНОСТЬ --- */
+@media (max-width: 600px) {
+    .control-panel { flex-direction: column; gap: 10px; }
+}
+
+/* Горизонтальный телефон */
+@media (orientation: landscape) and (max-height: 500px) {
+    .memo-container { max-width: 700px; padding: 5px 10px; }
+    .control-panel { flex-direction: row; padding: 5px 10px; margin-bottom: 5px; }
+    .controls-group { gap: 5px; }
+    .start-btn, .select-field { padding: 5px 10px; font-size: 12px; }
+    .game-board { gap: 5px; }
+    .game-footer { padding: 5px 10px; margin-top: 5px; }
+    .front-face { padding: 2px; }
 }
