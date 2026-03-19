@@ -1,35 +1,37 @@
+* {
+    padding: 0; margin: 0; box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
     background: #1a1a2e;
     color: white;
     user-select: none;
     -webkit-user-select: none;
-    /* Блокируем скролл всей страницы, прокручиваться будет только доска */
-    overflow: hidden; 
-    height: 100vh;
+    overflow-x: hidden;
 }
 
 .memo-container {    
     margin: 0 auto;
     width: 100%;
     max-width: 900px;
-    padding: 15px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    height: 100%; /* Контейнер строго на весь экран */
+    align-items: center;
+    min-height: 100vh;
 }
 
-/* === ЖЕЛЕЗОБЕТОННЫЙ ХЕДЕР === */
 .control-panel {  
-    flex: 0 0 auto; /* Запрещаем сжиматься и растягиваться */
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 25px;
     display: flex;
     justify-content: space-between;
     align-items: center;    
     background: #16213e;
     padding: 15px 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
 }
 
 .controls-group {
@@ -67,43 +69,42 @@ body {
     gap: 8px;
 }
 
-.timer-display .label { color: #95a5a6; font-size: 16px; }
-.time-item { color: #f1c40f; }
-
-/* === ГИБКАЯ ИГРОВАЯ ДОСКА СО СКРОЛЛОМ === */
-.game-board {
-    flex: 1 1 auto; /* Забирает всё свободное место между хедером и футером */
-    overflow-y: auto; /* Включаем внутренний скролл! */
-    display: grid;
-    gap: 10px; 
-    align-content: start; /* Прижимаем карты к верху, чтобы скролл работал адекватно */
-    width: 100%;
-    padding: 5px; /* Чтобы не обрезалась тень от крайних карт */
+.timer-display .label {
+    color: #95a5a6;
+    font-size: 16px;
 }
 
-/* Стилизуем скроллбар в цвет темы, чтобы выглядело про-уровне */
-.game-board::-webkit-scrollbar { width: 8px; }
-.game-board::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 4px; }
-.game-board::-webkit-scrollbar-thumb { background: #e94560; border-radius: 4px; }
+.time-item { color: #f1c40f; }
+
+/* CSS Grid для гибкой сетки карточек */
+.game-board {
+    display: grid;
+    gap: 10px;
+    perspective: 1200px;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 25px;
+}
 
 .memory-card {
     position: relative;
     width: 100%;
-    aspect-ratio: 1 / 1; 
+    aspect-ratio: 1 / 1; /* Карточки всегда квадратные */
     transform-style: preserve-3d;
     transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: pointer;
     box-shadow: 2px 2px 8px rgba(0,0,0,0.4);
-    border-radius: 8px;
+    border-radius: 12px;
 }
 
 .memory-card:active { transform: scale(0.96); }
+
 .memory-card.flip { transform: rotateY(180deg); }
 
 .front-face, .back-face {
     width: 100%; height: 100%;
     position: absolute;
-    border-radius: 8px;
+    border-radius: 12px;
     backface-visibility: hidden;
     object-fit: cover;
     border: 2px solid rgba(255,255,255,0.1);
@@ -112,17 +113,41 @@ body {
 .front-face { transform: rotateY(180deg); background: #fdfdfd; }
 .back-face { background: #0f3460; }
 
-/* === ЖЕЛЕЗОБЕТОННЫЙ ФУТЕР === */
 .game-footer {
-    flex: 0 0 auto; /* Запрещаем сжиматься и растягиваться */
     width: 100%;
     background: #16213e;
-    padding: 10px 15px;
-    border-radius: 12px;
+    padding: 15px;
+    border-radius: 15px;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    box-shadow: 0 -4px 10px rgba(0,0,0,0.3);
-    margin-top: 15px; 
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.3);
+}
+
+.score-display {
+    font-size: 16px;
+    font-weight: 500;
+    color: #bdc3c7;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.score-result { color: #e74c3c; font-size: 18px; font-weight: bold; }
+
+.win-message {
+    display: none; /* Скрыто по умолчанию */
+    font-size: 24px;
+    font-weight: bold;
+    color: #2ecc71;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
